@@ -25,10 +25,16 @@ function add_to_timer(n) {
     console.log("Add to timer: " + n)
 }
 
+function random_with_grid(limit, border, delta) {
+    // Generates random number in [border; border + delta; border + 2 * delta; ... ; limit - border)
+    return random_randrange((limit - 2 * border) / delta) * delta + border;
+}
+
 function draw_graph(graph, div) {
     var height = 200;
     var width = 200;
     var border = 10;
+    var delta = 30;
 
     var canvas = $("<canvas>").attr("height", height).attr("width", width).addClass("canvas");
     div.html(canvas);
@@ -37,8 +43,8 @@ function draw_graph(graph, div) {
 
     var coords = [];
     for (var i = 0; i < graph.num_vertices; ++i) {
-        coords.push([random_randrange(width - 2 * border) + border,
-                     random_randrange(height - 2 * border) + border]);
+        coords.push([random_with_grid(width, border, delta),
+                     random_with_grid(height, border, delta)]);
     }
 
     for (var i in graph.edges) {
