@@ -1,7 +1,62 @@
-.choice {
-    display: inline-block;
+.body-container {
+	margin-left: auto;
+	margin-right: auto;
+	/*border: 1px solid black;*/
+	text-align: center;
+	width: 950px;
+	position: relative;
 }
 
+
+	#counter {
+		position: absolute;
+		font-family: Helvetica;
+		box-sizing: border-box;
+		width: 200px;
+		height: 200px;
+		left: 87px;
+		font-size: 60px;
+		padding-top: 70px;
+	}
+
+	#timer {
+		position: absolute;
+		font-family: Helvetica;
+		box-sizing: border-box;
+		width: 200px;
+		height: 200px;
+		right: 87px;
+		font-size: 60px;
+		padding-top: 70px;
+	}
+
+	.header #reference_graph {
+		/*text-align: center;*/
+	}
+
+		#reference_graph .canvas {
+			
+		}
+
+	#choices {
+		text-align: center;
+		margin-top: 50px;
+	}
+
+		#choices .choice {
+		    display: inline-block;
+		    cursor: pointer;
+		}
+
+		#choices .choice:not(:first-of-type) {
+			margin-left: 50px;
+		}
+
+		#choices .choice:hover {
+			background-color: #D9EDF7;
+		}
+
 .canvas {
-    border: 1px solid blue;
+	border-radius: 10px;
+	box-shadow: inset 0 0 1px black; 
 }
