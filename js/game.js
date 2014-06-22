@@ -7,6 +7,8 @@ var new_level = undefined;
 var game_is_on = true;
 var timer = 0;
 
+var MAX_LEVEL = 11;
+
 /*
  * Utilities
  */
@@ -107,7 +109,7 @@ function lose() {
 }
 
 function generate_new_level() {
-    var level = Math.min(Math.round(Math.sqrt(correct_answers)), 8);
+    var level = Math.min(Math.round(Math.sqrt(correct_answers)), MAX_LEVEL);
     var num_choices = (correct_answers >= 15) ? 3 : 2;
 
     var reference_graph = random_randrange(levels[level].length);
@@ -134,7 +136,7 @@ function switch_to_new_level() {
     current_level = new_level;
     draw_graphs(current_level.reference_graph, current_level.choices);
     // dirty hack. otherwise it doesn't redraw
-    setTimeout(generate_new_level, 20);
+    setTimeout(generate_new_level, 5);
 }
 
 function handle_choice(k) {

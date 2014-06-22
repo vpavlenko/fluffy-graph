@@ -98,9 +98,17 @@ def draw_graph(graph):
             # print('.', end='')
 
 
+def array_to_list(a):
+    return [int(round(x + border)) for x in a]
+
+
+def draw_graph_nx(g):
+    pos = nx.spring_layout(g, scale=height - 2 * border)
+    return [array_to_list(pos[i]) for i in range(len(g.nodes()))]
+
 
 def drawings(g, n):
-    return [draw_graph(g) for i in range(n)]
+    return [draw_graph_nx(g) for i in range(n)]
 
 
 
@@ -126,7 +134,7 @@ with open(out_filename, 'w') as ouf:
             'maxd': max(degrees)
         }
 
-        gr['i'] = drawings(gr, 5)
+        gr['i'] = drawings(g, 10)
 
         print(json.dumps(gr, separators=(',',':')), file=ouf)
         print(json.dumps(gr, separators=(',',':')))
