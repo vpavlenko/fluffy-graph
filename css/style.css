@@ -1,0 +1,7 @@
+.choice {
+    display: inline-block;
+}
+
+.canvas {
+    border: 1px solid red;
+}
