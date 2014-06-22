@@ -1,50 +1,122 @@
 var correct_answer = -1;
 var correct_answers = 0;
 
+/*
+ * Utilities
+ */
+
 function random_randrange(n) {
     return Math.floor(Math.random() * n);
-}
-
-function new_game() {
-    add_to_timer(10);
-    new_level();
-}
-
-function win() {
-    correct_answers++;
-    $("#counter").text(correct_answers);
-    new_level();
-}
-
-function lose() {
-    new_level();
-    console.log("lose");
 }
 
 function add_to_timer(n) {
     console.log("Add to timer: " + n)
 }
 
+/*
+ * Graph drawing logic
+ */
+
 function random_with_grid(limit, border, delta) {
     // Generates random number in [border; border + delta; border + 2 * delta; ... ; limit - border)
     return random_randrange((limit - 2 * border) / delta) * delta + border;
 }
 
-function draw_graph(graph, div) {
-    var height = 200;
-    var width = 200;
-    var border = 10;
-    var delta = 30;
+var height = 200;
+var width = 200;
+var border = 10;
+var delta = 30;
+var EPSILON = 1e-6;
+var MIN_CROSS_PRODUCT = height * width / 10;
+// var MIN_CROSS_PRODUCT = 0;
 
+function generate_grid(num_vertices) {
+    var coords = [];
+    for (var i = 0; i < num_vertices; ++i) {
+        coords.push([random_with_grid(width, border, delta),
+                     random_with_grid(height, border, delta)]);
+    }
+    return coords;
+}
+
+function geom_eq(a, b) {
+    return Math.abs(a - b) < EPSILON;
+}
+
+function geom_ge(a, b) {
+    return a + EPSILON > b;
+}
+
+function dot_product(u, v) {
+    return u[0] * v[0] + u[1] * v[1];
+}
+
+function cross_product(u, v) {
+    return u[0] * v[1] - u[1] * v[0];
+}
+
+function edge_to_vector(edge, coords) {
+    return [coords[edge[1]][0] - coords[edge[0]][0],
+            coords[edge[1]][1] - coords[edge[0]][1]];
+}
+
+function vector(start, end) {
+    return [end[0] - start[0], end[1] - start[1]];
+}
+
+function is_good_grid(graph, coords) {
+    // 1. Check if there are two edges lie on the same line or nearly
+
+    for (var i in graph.edges) {
+        for (var j in graph.edges) {
+            if (i >= j) {
+                continue;
+            }
+            var u = edge_to_vector(graph.edges[i], coords);
+            var v = edge_to_vector(graph.edges[j], coords);
+            if (geom_ge(MIN_CROSS_PRODUCT, Math.abs(cross_product(u, v)))) {
+                return false;
+            }
+        }
+    }
+
+    // 2. Check if there is any vertex that lie on some edge
+    // Look, it also check if there are two vertices with the same coordinates
+
+    for (var i in graph.edges) {
+        for (var j = 0; j < graph.num_vertices; ++j) {
+            var edge = graph.edges[i];
+            if (j == edge[0] || j == edge[1]) {
+                continue;
+            }
+            var u = coords[edge[0]];
+            var v = coords[edge[1]];
+            var w = coords[j];
+            var uv = vector(u, v);
+            var uw = vector(u, w);
+            var vw = vector(v, w);
+            var vu = vector(v, u);
+            if (geom_eq(cross_product(uw, uv), 0) && geom_ge(dot_product(uw, uv), 0)
+                    && geom_ge(dot_product(vw, vu), 0)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+function draw_graph(graph, div) {
     var canvas = $("<canvas>").attr("height", height).attr("width", width).addClass("canvas");
     div.html(canvas);
 
     var context = canvas[0].getContext('2d');
 
-    var coords = [];
-    for (var i = 0; i < graph.num_vertices; ++i) {
-        coords.push([random_with_grid(width, border, delta),
-                     random_with_grid(height, border, delta)]);
+    while (true) {
+        var coords = generate_grid(graph.num_vertices);
+        if (is_good_grid(graph, coords)) {
+            break;
+        }
     }
 
     for (var i in graph.edges) {
@@ -75,6 +147,26 @@ function draw_graphs(reference_graph, choices) {
         div_choices.append(div_choice);
         draw_graph(choices[i], div_choice);
     }
+}
+
+/*
+ * Switch between levels logic
+ */
+
+function new_game() {
+    add_to_timer(10);
+    new_level();
+}
+
+function win() {
+    correct_answers++;
+    $("#counter").text(correct_answers);
+    new_level();
+}
+
+function lose() {
+    new_level();
+    console.log("lose");
 }
 
 function new_level() {
@@ -109,6 +201,10 @@ function handle_choice(k) {
     }
 }
 
+/*
+ * Graph generating logic
+ */
+
 generate_graph = function(num_vertices, num_edges) {
     var edges = [];
     var edges_hashes = [];
@@ -138,7 +234,6 @@ generate_graph = function(num_vertices, num_edges) {
 }
 
 generate_non_isomorphing = function(reference_graph) {
-    console.log(132);
     while (true) {
         var new_graph = generate_graph(reference_graph.num_vertices, reference_graph.num_edges);
         if (!are_isomorphing(reference_graph, new_graph)) {
@@ -167,20 +262,16 @@ are_isomorphing = function(a, b) {
         }
         var s = generate_edge_set_hash(a.edges);
         var t = generate_edge_set_hash(b_edge_set);
-        console.log(s, t);
         return s == t;
     }
 
     var permutations = generate_permutations(a.num_vertices);
     for (var i in permutations) {
-        console.log(i);
         if (is_permutation_an_isomorphism(permutations[i])) {
-            console.log("true");
             return true;
         }
     }
 
-    console.log("false");
     return false;
 }
 
