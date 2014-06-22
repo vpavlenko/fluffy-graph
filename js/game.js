@@ -223,10 +223,12 @@ function switch_to_new_level() {
 }
 
 function handle_choice(k) {
-    if (k == current_level.correct_answer) {
-        win();
-    } else {
-        lose();
+    if (game_is_on) {
+        if (k == current_level.correct_answer) {
+            win();
+        } else {
+            lose();
+        }
     }
 }
 
