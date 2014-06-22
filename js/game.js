@@ -24,9 +24,9 @@ function random_with_grid(limit, border, delta) {
     return random_randrange((limit - 2 * border) / delta) * delta + border;
 }
 
-var height = 200;
-var width = 200;
-var border = 10;
+var height = 400;
+var width = 400;
+var border = 30;
 var delta = 25;
 var EPSILON = 1e-6;
 var MIN_CROSS_PRODUCT = height * width / 30;
@@ -128,7 +128,7 @@ function draw_graph(graph, div) {
 
     for (var i in coords) {
         context.beginPath();
-        context.arc(coords[i][0], coords[i][1], 5, 0, 2 * Math.PI, false);
+        context.arc(coords[i][0], coords[i][1], 10, 0, 2 * Math.PI, false);
         context.fillStyle = 'blue';
         context.fill();
     }
