@@ -49,5 +49,9 @@ for filename in filenames:
         except Exception as e:
             print(e)
 
+for k, v in levels.items():
+    print('At level', k, ':', len(v), 'graphs')
+
+
 with open('../js/graphs.js', 'w') as ouf:
     print('var levels = ' + json.dumps(levels, separators=(',',':')), file=ouf)
