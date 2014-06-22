@@ -4,16 +4,15 @@ var correct_answers = 0;
 var current_level = undefined;
 var new_level = undefined;
 
+var game_is_on = true;
+var timer = 0;
+
 /*
  * Utilities
  */
 
 function random_randrange(n) {
     return Math.floor(Math.random() * n);
-}
-
-function add_to_timer(n) {
-    console.log("Add to timer: " + n)
 }
 
 /*
@@ -162,6 +161,7 @@ function attach_coords(graph) {
  */
 
 function new_game() {
+    game_is_on = true;
     add_to_timer(10);
     generate_new_level();
     switch_to_new_level();
@@ -169,12 +169,15 @@ function new_game() {
 
 function win() {
     correct_answers++;
+    add_to_timer(5);
     $("#counter").text(correct_answers);
     switch_to_new_level();
 }
 
 function lose() {
-    switch_to_new_level();
+    game_is_on = false;
+    $('#timer').text("lost");
+    // switch_to_new_level();
 }
 
 function copy_graph(graph) {
@@ -223,6 +226,25 @@ function handle_choice(k) {
     if (k == current_level.correct_answer) {
         win();
     } else {
+        lose();
+    }
+}
+
+function visualize_timer() {
+    $('#timer').text(timer);
+}
+
+function add_to_timer(n) {
+    timer += n;
+    visualize_timer();
+}
+
+function decrement_time() {
+    if (game_is_on) {
+        timer--;
+        visualize_timer();
+    };
+    if (timer <= 0) {
         lose();
     }
 }
@@ -334,4 +356,9 @@ $(function() {
     $(document).on('click', '.choice', function() {
        handle_choice($(this).attr("data-number"));
     });
+
+    setInterval(function() {
+        console.log(358);
+        decrement_time()
+    }, 1000);
 });
