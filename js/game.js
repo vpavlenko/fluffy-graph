@@ -27,9 +27,9 @@ function random_with_grid(limit, border, delta) {
 var height = 400;
 var width = 400;
 var border = 30;
-var delta = 25;
+var delta = 35;
 var EPSILON = 1e-6;
-var MIN_CROSS_PRODUCT = height * width / 30;
+var MIN_CROSS_PRODUCT = height * width / 10;
 // var MIN_CROSS_PRODUCT = 0;
 
 function generate_grid(num_vertices) {
