@@ -169,7 +169,7 @@ function new_game() {
 
 function win() {
     correct_answers++;
-    add_to_timer(5);
+    add_to_timer(3);
     $("#counter").text(correct_answers);
     switch_to_new_level();
 }
@@ -189,9 +189,9 @@ function copy_graph(graph) {
 }
 
 function generate_new_level() {
-    var num_vertices = 5;
-    var num_edges = 6;
-    var num_choices = 2;
+    var num_vertices = (correct_answers > 5) ? 5 : 4;
+    var num_edges = (correct_answers > 10) ? 6 : ((correct_answers > 7) ? 5 : 4);
+    var num_choices = (correct_answers > 15) ? 3 : 2;
 
     var reference_graph = generate_graph(num_vertices, num_edges)
     attach_coords(reference_graph);
