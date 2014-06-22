@@ -1,6 +1,9 @@
 var correct_answer = -1;
 var correct_answers = 0;
 
+var current_level = undefined;
+var new_level = undefined;
+
 /*
  * Utilities
  */
@@ -25,9 +28,9 @@ function random_with_grid(limit, border, delta) {
 var height = 200;
 var width = 200;
 var border = 10;
-var delta = 30;
+var delta = 25;
 var EPSILON = 1e-6;
-var MIN_CROSS_PRODUCT = height * width / 10;
+var MIN_CROSS_PRODUCT = height * width / 30;
 // var MIN_CROSS_PRODUCT = 0;
 
 function generate_grid(num_vertices) {
@@ -96,7 +99,7 @@ function is_good_grid(graph, coords) {
             var uw = vector(u, w);
             var vw = vector(v, w);
             var vu = vector(v, u);
-            if (geom_eq(cross_product(uw, uv), 0) && geom_ge(dot_product(uw, uv), 0)
+            if (geom_ge(MIN_CROSS_PRODUCT, cross_product(uw, uv)) && geom_ge(dot_product(uw, uv), 0)
                     && geom_ge(dot_product(vw, vu), 0)) {
                 return false;
             }
@@ -112,12 +115,7 @@ function draw_graph(graph, div) {
 
     var context = canvas[0].getContext('2d');
 
-    while (true) {
-        var coords = generate_grid(graph.num_vertices);
-        if (is_good_grid(graph, coords)) {
-            break;
-        }
-    }
+    var coords = graph.coords;
 
     for (var i in graph.edges) {
         var a = graph.edges[i][0];
@@ -149,52 +147,80 @@ function draw_graphs(reference_graph, choices) {
     }
 }
 
+function attach_coords(graph) {
+    while (true) {
+        var coords = generate_grid(graph.num_vertices);
+        if (is_good_grid(graph, coords)) {
+            break;
+        }
+    }
+    graph.coords = coords;
+}
+
 /*
  * Switch between levels logic
  */
 
 function new_game() {
     add_to_timer(10);
-    new_level();
+    generate_new_level();
+    switch_to_new_level();
 }
 
 function win() {
     correct_answers++;
     $("#counter").text(correct_answers);
-    new_level();
+    switch_to_new_level();
 }
 
 function lose() {
-    new_level();
-    console.log("lose");
+    switch_to_new_level();
 }
 
-function new_level() {
-    var num_vertices = 5;
-    var num_edges = 4;
-    var num_choices = 4;
+function copy_graph(graph) {
+    return {
+        num_vertices: graph.num_vertices,
+        num_edges: graph.num_edges,
+        edges: graph.edges.slice(0)
+    }
+}
 
-    // alert(51);
+function generate_new_level() {
+    var num_vertices = 5;
+    var num_edges = 6;
+    var num_choices = 2;
 
     var reference_graph = generate_graph(num_vertices, num_edges)
-    // alert(54);
+    attach_coords(reference_graph);
+
     var choices = []
     for (var i = 0; i < num_choices - 1; ++i) {
-        // alert(57);
-        choices.push(generate_non_isomorphing(reference_graph))
+        var choice = generate_non_isomorphing(reference_graph);
+        attach_coords(choice);
+        choices.push(choice);
     }
 
-    // alert(59);
+    var correct_answer = random_randrange(num_choices)
+    var reference_graph_copy = copy_graph(reference_graph);
+    attach_coords(reference_graph_copy);
+    choices = choices.slice(0, correct_answer).concat([reference_graph_copy]).concat(choices.slice(correct_answer));
 
-    correct_answer = random_randrange(num_choices)
-    // correct_answer = 0;
-    choices = choices.slice(0, correct_answer).concat([reference_graph]).concat(choices.slice(correct_answer));
+    new_level = {
+        correct_answer: correct_answer,
+        reference_graph: reference_graph,
+        choices: choices
+    };
+}
 
-    draw_graphs(reference_graph, choices)
+function switch_to_new_level() {
+    current_level = new_level;
+    draw_graphs(current_level.reference_graph, current_level.choices);
+    // dirty hack. otherwise it doesn't redraw
+    setTimeout(generate_new_level, 20);
 }
 
 function handle_choice(k) {
-    if (k == correct_answer) {
+    if (k == current_level.correct_answer) {
         win();
     } else {
         lose();
