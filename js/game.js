@@ -35,51 +35,6 @@ function random_randrange_excluded(n, k) {
     }
 }
 
-/*
- * Graph drawing logic
- */
-
-function random_with_grid(limit, border, delta) {
-    // Generates random number in [border; border + delta; border + 2 * delta; ... ; limit - border)
-    return random_randrange((limit - 2 * border) / delta) * delta + border;
-}
-
-var height = 400;
-var width = 400;
-var border = 30;
-var delta = 35;
-var EPSILON = 1e-6;
-var MIN_CROSS_PRODUCT = height * width / 10;
-
-function draw_graph(graph, div, exclude_coord) {
-    var canvas = $("<canvas>").attr("height", height).attr("width", width).addClass("canvas");
-    div.html(canvas);
-
-    var context = canvas[0].getContext('2d');
-
-    var coords_variant = random_randrange_excluded(graph.i.length, exclude_coord);
-    console.log(coords_variant);
-    var coords = graph.i[coords_variant];
-
-    for (var i in graph.e) {
-        var a = graph.e[i][0];
-        var b = graph.e[i][1];
-
-        context.beginPath();
-        context.moveTo(coords[a][0], coords[a][1]);
-        context.lineTo(coords[b][0], coords[b][1]);
-        context.stroke();
-    }
-
-    for (var i in coords) {
-        context.beginPath();
-        context.arc(coords[i][0], coords[i][1], 10, 0, 2 * Math.PI, false);
-        context.fillStyle = 'blue';
-        context.fill();
-    }
-
-    return coords_variant;
-}
 
 function draw_graphs(reference_graph, choices, correct_answer) {
     var reference_variant = draw_graph(reference_graph, $("div#reference_graph"), -1);
