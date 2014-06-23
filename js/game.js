@@ -99,6 +99,7 @@ function draw_graphs(reference_graph, choices, correct_answer) {
  */
 
 function new_game() {
+    $('.game-over').hide();
     game_is_on = true;
     add_to_timer(10);
     generate_new_level();
@@ -121,6 +122,7 @@ function win() {
 }
 
 function lose() {
+    $('.game-over').show();
     game_is_on = false;
     $('#timer').html("<span class='lost'>no</span>");
 }
@@ -200,6 +202,10 @@ $(function() {
 
     $(document).on('keypress', 'html', function(event) {
         handle_choice(event.keyCode - 49);
+    });
+
+    $(document).on('click', '#try-again', function() {
+        new_game();
     });
 
     setInterval(function() {
