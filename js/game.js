@@ -115,7 +115,7 @@ function win() {
         }
     }, 300);
     
-    add_to_timer(5 + Math.round(correct_answers / 5));
+    add_to_timer(4 + Math.round(correct_answers / 7));
     $("#counter").text(correct_answers);
     switch_to_new_level();
 }
@@ -129,7 +129,7 @@ function generate_new_level() {
     var level = Math.min(correct_answers, levels.length - 1);
     // var level = Math.min(Math.round(Math.sqrt(2.5 * correct_answers)), MAX_LEVEL);
     console.log('level: ' + level);
-    var num_choices = (correct_answers >= 5) ? 3 : 2;
+    var num_choices = (correct_answers >= 5) ? ((correct_answers >= 30) ? 4 : 3) : 2;
 
     var reference_graph = random_randrange(levels[level].length);
 
