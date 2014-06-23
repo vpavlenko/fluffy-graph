@@ -27,9 +27,11 @@ def get_level(g):
     if n == 4:
         return 0
     elif n == 5:
-        return e - 4
-    else:
-        return e - 1
+        return e - 4  # 1..4
+    elif n == 6:
+        return 5 + (e - 6) * 2  # 5, 7, ...
+    elif n == 7:
+        return 6 + (e - 7) * 2  # 6, 8, ...
 
 
 levels = defaultdict(list)

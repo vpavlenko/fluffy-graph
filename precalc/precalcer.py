@@ -103,7 +103,7 @@ def array_to_list(a):
 
 
 def draw_graph_nx(g):
-    pos = nx.spring_layout(g, scale=height - 2 * border, iterations=25)
+    pos = nx.spring_layout(g, scale=height - 2 * border, iterations=45)
     return [array_to_list(pos[i]) for i in range(len(g.nodes()))]
 
 

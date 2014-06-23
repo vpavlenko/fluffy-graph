@@ -109,7 +109,8 @@ function lose() {
 }
 
 function generate_new_level() {
-    var level = Math.min(Math.round(Math.sqrt(correct_answers)), MAX_LEVEL);
+    var level = Math.min(Math.round(Math.sqrt(2.5 * correct_answers)), MAX_LEVEL);
+    console.log('level: ' + level);
     var num_choices = (correct_answers >= 15) ? 3 : 2;
 
     var reference_graph = random_randrange(levels[level].length);
