@@ -7,8 +7,7 @@ var new_level = undefined;
 var game_is_on = true;
 var timer = 0;
 
-// var MAX_LEVEL = levels.length - 1;
-// console.log('num levels = ', MAX_LEVEL)
+var ADD_SECOND_PER_LEVELS = 10;
 
 /*
  * Utilities
@@ -71,7 +70,7 @@ function win() {
         }
     }, 300);
     
-    add_to_timer(4 + Math.round(correct_answers / 7));
+    add_to_timer(4 + Math.round(correct_answers / ADD_SECOND_PER_LEVELS));
     $("#counter").text(correct_answers);
     switch_to_new_level();
 }
