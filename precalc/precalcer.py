@@ -6,6 +6,7 @@ import sys
 import json
 import random
 from math import pi, acos, sqrt
+from collections import defaultdict
 
 random.seed(0)
 
@@ -15,9 +16,12 @@ border = 30;
 delta = 25;
 EPSILON = 1e-6;
 MIN_CROSS_PRODUCT = height * width / 50;
-LAYOUT_ITERATIONS = 60
+SPRING_LAYOUT_ITERATIONS = 60
 MINIMAL_ANGLE_BETWEEN_EDGES = 10
-MAX_LAYOUT_RETRY = 50
+MAX_GOOD_LAYOUTS_RETRY = 50
+SEED_FIND_DIFFERENT_ITERATIONS = 50
+MAX_DIFFERENT_LAYOUTS_RETRY = 200
+LAYOUT_CLASS_MIN_SIZE = 5
 
 
 def random_with_grid(limit, border, delta):
@@ -151,7 +155,6 @@ def good_layout(g, pos):
         for f in g.edges():
             if len(set(e + f)) == 3:
                 if not good_edges_layout(e, f, pos):
-                    print('Found bad angle')
                     return False
     return True
 
@@ -160,21 +163,88 @@ def draw_graph_nx(g):
     j = 0
     while True:
         j += 1
-        pos = nx.spring_layout(g, scale=height - 2 * border, iterations=LAYOUT_ITERATIONS)
+        pos = nx.spring_layout(g, scale=height - 2 * border, iterations=SPRING_LAYOUT_ITERATIONS)
         pos = [array_to_list(pos[i]) for i in range(len(g.nodes()))]
         if good_layout(g, pos):
+            print('Found GOOD angle')
             break
-        if j > MAX_LAYOUT_RETRY:
+        else:
+            print('Found bad angle')
+        if j > MAX_GOOD_LAYOUTS_RETRY:
             return None
     return pos
 
 
+def not_enough_layouts(layouts):
+    lens = [len(v) for v in layouts.values()]
+    print('is enough layouts?', lens)
+    return not all(len(v) >= LAYOUT_CLASS_MIN_SIZE for v in layouts.values()) and (sum(lens) < MAX_DIFFERENT_LAYOUTS_RETRY)
+
+
+def flatten(a):
+    res = []
+    for i in a:
+        res.extend(i)
+    return res
+
+
+def shrink_layouts(layouts):
+    for k in layouts:
+        layouts[k] = layouts[k][-LAYOUT_CLASS_MIN_SIZE:]
+    return flatten(layouts.values())
+
+
+def on_different_sides(e, f, pos):
+    u = edge_to_vector([e[0], f[0]], pos)
+    v = edge_to_vector(e, pos)
+    w = edge_to_vector([e[0], f[1]], pos)
+    return cross_product(v, u) * cross_product(v, w) < 0
+
+
+def num_intersections(pos, g):
+    res = 0
+    for e in g.edges():
+        for f in g.edges():
+            if e != f:
+                #             f[0]
+                #           /
+                # e[0]  ----------  e[1]
+                #         / 
+                #     f[1]
+                if on_different_sides(e, f, pos) and on_different_sides(f, e, pos):
+                    res += 1
+    res /= 2
+    print('num_intersections:', res)
+    return res
+
+
+def draw_enforce_different_layouts(array, g, n):
+    layouts = defaultdict(list)
+    # layouts = {num_intersections(pos, g): [] for pos in array}
+    for pos in array:
+        layouts[num_intersections(pos, g)].append(pos)
+    print('intersection classes:', layouts.keys())
+    print('enforce different layouts')
+    i = 0
+    while not_enough_layouts(layouts):
+        i += 1
+        pos = draw_graph_nx(g)
+        if pos is None:
+            return None
+        else:
+            layouts[num_intersections(pos, g)].append(pos)
+        # print('.', end='')
+    print('enough')
+    return shrink_layouts(layouts)
+
+
 def drawings(g, n):
-    array = [draw_graph_nx(g) for i in range(n)]
+    array = [draw_graph_nx(g) for i in range(SEED_FIND_DIFFERENT_ITERATIONS)]
     if None in array:
         return None
     else:
-        return array
+        return draw_enforce_different_layouts(array, g, n)
+        # return array
 
 
 inp_filename = sys.argv[1]

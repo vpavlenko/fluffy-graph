@@ -2,7 +2,7 @@
 import json
 from collections import defaultdict
 
-MIN_LEVEL_SIZE = 4
+MIN_LEVEL_SIZE = 5
 
 filenames = [
     'connected_4_vertices.json',    
@@ -80,6 +80,16 @@ def smart_division(old_levels):
             print('growth from', len(old_levels), 'to', len(new_levels))
 
 
+def stupid_division(old_levels):
+    new_levels = []
+    for level in old_levels:
+        while len(level) >= 2 * MIN_LEVEL_SIZE:
+            new_levels.append(level[-MIN_LEVEL_SIZE:])
+            level = level[:-MIN_LEVEL_SIZE]
+        new_levels.append(level)
+    return new_levels
+
+
 def collect_level_info(level):
     info = []
     info.append('len = ' + str(len(level)))
@@ -112,7 +122,9 @@ for filename in filenames:
             print(e)
     levels.append(level)
 
-levels = smart_division(levels)
+levels = stupid_division(smart_division(levels))
+
+levels = [level for level in levels if len(level) >= MIN_LEVEL_SIZE]
 
 levels.sort(key=get_features_key)
 
