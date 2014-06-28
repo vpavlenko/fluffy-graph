@@ -5,7 +5,7 @@ from collections import defaultdict
 MIN_LEVEL_SIZE = 5
 
 filenames = [
-    'connected_4_vertices.json',    
+    # 'connected_4_vertices.json',    
     'connected_5_vertices.json',    
     'connected_6_vertices.json',
     'connected_7_vertices.json',

@@ -75,13 +75,15 @@ function random_transform(coords) {
 }
 
 
-function draw_graph_selected_coords(graph, div, coords_variant) {
+function draw_graph_selected_coords(graph, div, coords_bucket) {
     var canvas = $("<canvas>").attr("height", height).attr("width", width).addClass("canvas");
     div.html(canvas);
 
     var context = canvas[0].getContext('2d');
     
-    var coords = graph.i[coords_variant];
+    var key = Object.keys(graph.i)[coords_bucket];
+    var variant_in_bucket = random_randrange(graph.i[key].length);
+    var coords = graph.i[key][variant_in_bucket];
 
     coords = random_transform(coords)
 
@@ -102,12 +104,11 @@ function draw_graph_selected_coords(graph, div, coords_variant) {
         context.fill();
     }
 
-    return coords_variant;
+    return coords_bucket;
 }
 
 
 function draw_graph(graph, div, exclude_coord) {
-    var coords_variant = random_randrange_excluded(graph.i.length, exclude_coord);
-    draw_graph_selected_coords(graph, div, coords_variant);
+    var coords_bucket = random_randrange_excluded(Object.keys(graph.i).length, exclude_coord);
+    return draw_graph_selected_coords(graph, div, coords_bucket);
 }
-

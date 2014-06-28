@@ -1,5 +1,5 @@
 var correct_answer = -1;
-var correct_answers = 0;
+var correct_answers = -1;
 
 var current_level = undefined;
 var new_level = undefined;
@@ -15,38 +15,16 @@ var ADD_SECOND_PER_LEVELS = 10;
  * Utilities
  */
 
-function random_randrange(n) {
-    return Math.floor(Math.random() * n);
-}
-
-function random_randrange_excluded(n, k) {
-    while (true) {
-        var i = random_randrange(n)
-        if (k instanceof Array) {
-            console.log('excluded Array', JSON.stringify(k))
-            if ($.inArray(i, k) == -1) {
-                console.log('return ', i);
-                return i;
-            }
-        } else {
-            if (i != k) {
-                return i;
-            }
-        }
-    }
-}
-
-
 function draw_graphs(reference_graph, choices, correct_answer) {
-    var reference_variant = draw_graph(reference_graph, $("div#reference_graph"), -1);
+    var reference_bucket = draw_graph(reference_graph, $("div#reference_graph"), -1);
 
     var div_choices = $("div#choices");
     div_choices.html("");
     for (var i in choices) {
         var div_choice = $("<div class='choice'>").attr("data-number", i);
         div_choices.append(div_choice);
-        console.log(i, current_level.correct_answer, reference_variant);
-        draw_graph(choices[i], div_choice, (i == current_level.correct_answer) ? reference_variant : -1);
+        console.log(i, current_level.correct_answer, reference_bucket);
+        draw_graph(choices[i], div_choice, (i == current_level.correct_answer) ? reference_bucket : -1);
     }
 }
 
@@ -64,9 +42,9 @@ function start_timer() {
 function start_new_game() {
     $('.game-over').hide();
     game_is_on = true;
+    generate_new_level();
     correct_answers = 0;
     $("#counter").text(correct_answers);
-    generate_new_level();
     switch_to_new_level();
     start_timer();
     hearts = 3;
@@ -84,7 +62,7 @@ function pass_level() {
         }
     }, 300);
     
-    add_to_timer(4 + Math.round(correct_answers / ADD_SECOND_PER_LEVELS));
+    add_to_timer(3 + Math.round(correct_answers / ADD_SECOND_PER_LEVELS));
     $("#counter").text(correct_answers);
     switch_to_new_level();
 }
@@ -150,7 +128,7 @@ function generate_level(level) {
 }
 
 function generate_new_level() {
-    var level = Math.min(correct_answers, levels.length - 1);
+    var level = Math.min(correct_answers, levels.length - 1) + 1;
     generate_level(level);
 }
 

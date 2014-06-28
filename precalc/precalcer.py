@@ -17,11 +17,11 @@ delta = 25;
 EPSILON = 1e-6;
 MIN_CROSS_PRODUCT = height * width / 50;
 SPRING_LAYOUT_ITERATIONS = 60
-MINIMAL_ANGLE_BETWEEN_EDGES = 10
-MAX_GOOD_LAYOUTS_RETRY = 50
+MINIMAL_ANGLE_BETWEEN_EDGES = 10  # 10
+MAX_GOOD_LAYOUTS_RETRY = 50  # 50
 SEED_FIND_DIFFERENT_ITERATIONS = 50
-MAX_DIFFERENT_LAYOUTS_RETRY = 200
-LAYOUT_CLASS_MIN_SIZE = 5
+MAX_DIFFERENT_LAYOUTS_RETRY = 200  # 200
+LAYOUT_CLASS_MIN_SIZE = 5  # 5
 
 
 def random_with_grid(limit, border, delta):
@@ -191,7 +191,8 @@ def flatten(a):
 def shrink_layouts(layouts):
     for k in layouts:
         layouts[k] = layouts[k][-LAYOUT_CLASS_MIN_SIZE:]
-    return flatten(layouts.values())
+    # return flatten(layouts.values())
+    return layouts
 
 
 def on_different_sides(e, f, pos):
@@ -218,7 +219,7 @@ def num_intersections(pos, g):
     return res
 
 
-def draw_enforce_different_layouts(array, g, n):
+def draw_enforce_different_layouts(array, g):
     layouts = defaultdict(list)
     # layouts = {num_intersections(pos, g): [] for pos in array}
     for pos in array:
@@ -243,7 +244,7 @@ def drawings(g, n):
     if None in array:
         return None
     else:
-        return draw_enforce_different_layouts(array, g, n)
+        return draw_enforce_different_layouts(array, g)
         # return array
 
 
@@ -270,7 +271,10 @@ with open(out_filename, 'w') as ouf:
 
         gr['i'] = drawings(g, 10)
         if gr['i'] is not None:
-            print(json.dumps(gr, separators=(',',':')), file=ouf)
+            if len(gr['i']) > 1:
+                print(json.dumps(gr, separators=(',',':')), file=ouf)
+            else:
+                print('ONLY ONE LAYOUT CLASS')
         else:
             print('EVERY LAYOUT IS BAD')
         # print(json.dumps(gr, separators=(',',':')))
