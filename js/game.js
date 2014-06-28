@@ -69,6 +69,8 @@ function start_new_game() {
     generate_new_level();
     switch_to_new_level();
     start_timer();
+    hearts = 3;
+    visualize_hearts();
 }
 
 function pass_level() {
@@ -87,6 +89,31 @@ function pass_level() {
     switch_to_new_level();
 }
 
+function regenerate_level() {
+    generate_level(correct_answers);
+    switch_to_new_level();
+}
+
+function fail_level() {
+    hearts--;
+    visualize_hearts();
+
+    // Visualize red color around correct-answers counter
+    var current_hearts = hearts;
+    $('#counter').addClass('counter-fail');
+    setTimeout(function() {
+        if (current_hearts == hearts) {
+            $('#counter').removeClass('counter-fail');
+        }
+    }, 300);
+
+    if (hearts <= 0) {
+        lose();
+    } else {
+        regenerate_level();
+    }
+}
+
 function lose() {
     $('.game-over').show();
     clearInterval(timer_id);
@@ -94,9 +121,7 @@ function lose() {
     $('#timer').html("<span class='lost'>no</span>");
 }
 
-function generate_new_level() {
-    var level = Math.min(correct_answers, levels.length - 1);
-    // var level = Math.min(Math.round(Math.sqrt(2.5 * correct_answers)), MAX_LEVEL);
+function generate_level(level) {
     console.log('level: ' + level);
     var num_choices = (correct_answers >= 5) ? ((correct_answers >= 30) ? 4 : 3) : 2;
 
@@ -124,11 +149,17 @@ function generate_new_level() {
     };
 }
 
+function generate_new_level() {
+    var level = Math.min(correct_answers, levels.length - 1);
+    generate_level(level);
+}
+
 function switch_to_new_level() {
     current_level = new_level;
     draw_graphs(current_level.reference_graph, current_level.choices);
     // dirty hack. otherwise it doesn't redraw
-    setTimeout(generate_new_level, 5);
+    // setTimeout(generate_new_level, 5);
+    generate_new_level();
 }
 
 function handle_choice(k) {
@@ -136,10 +167,14 @@ function handle_choice(k) {
         if (k == current_level.correct_answer) {
             pass_level();
         } else {
-            lose();
+            fail_level();
         }
     }
 }
+
+/*
+ * Timer functions
+ */
 
 function visualize_timer() {
     $('#timer').text(timer);
@@ -162,6 +197,17 @@ function decrement_time() {
     };
     if (timer <= 0) {
         lose();
+    }
+}
+
+/*
+ * Hearts functions
+ */
+
+function visualize_hearts() {
+    $('#hearts').html('');
+    for (var i = 0; i < hearts; ++i) {
+        $('#hearts').append($('<i class="fa fa-heart">'));
     }
 }
 

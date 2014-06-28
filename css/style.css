@@ -35,6 +35,10 @@ body div {
 	padding-top: 70px;
 }
 
+#hearts {
+	color: red;
+}
+
 .header #reference_graph {
 	/*text-align: center;*/
 }
@@ -76,6 +80,10 @@ height: 200px;
 
 .counter-win {
 	background-color: lightgreen;
+}
+
+.counter-fail {
+	background-color: pink;
 }
 
 .game-over {
