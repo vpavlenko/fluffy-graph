@@ -106,13 +106,15 @@ function generate_level(level) {
     var reference_graph = random_randrange(levels[level].length);
 
     var choices = []
+    var choices_indices = []
     for (var i = 0; i < num_choices - 1; ++i) {
         if (choices.length + 1 < levels[level].length) {
-            var choice = random_randrange_excluded(levels[level].length, choices.concat([reference_graph]))
+            var choice = random_randrange_excluded(levels[level].length, choices_indices.concat([reference_graph]))
         } else {
             var choice = random_randrange_excluded(levels[level].length, reference_graph);
         }
         choices.push(levels[level][choice]);
+        choices_indices.push(choice);
     }
 
     reference_graph = levels[level][reference_graph];
