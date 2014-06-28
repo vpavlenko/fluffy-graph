@@ -7,6 +7,8 @@ var new_level = undefined;
 var game_is_on = true;
 var timer = 0;
 
+var timer_id = -1;
+
 var ADD_SECOND_PER_LEVELS = 10;
 
 /*
@@ -52,17 +54,27 @@ function draw_graphs(reference_graph, choices, correct_answer) {
  * Switch between levels logic
  */
 
-function new_game() {
-    $('.game-over').hide();
-    game_is_on = true;
-    add_to_timer(10);
-    generate_new_level();
-    switch_to_new_level();
+function start_timer() {
+    set_timer(10);
+    timer_id = setInterval(function() {
+        decrement_time()
+    }, 1000);
 }
 
-function win() {
+function start_new_game() {
+    $('.game-over').hide();
+    game_is_on = true;
+    correct_answers = 0;
+    $("#counter").text(correct_answers);
+    generate_new_level();
+    switch_to_new_level();
+    start_timer();
+}
+
+function pass_level() {
     var current_correct_answers = ++correct_answers;
     
+    // Visualize green color around correct-answers counter
     $('#counter').addClass('counter-win');
     setTimeout(function() {
         if (current_correct_answers == correct_answers) {
@@ -77,6 +89,7 @@ function win() {
 
 function lose() {
     $('.game-over').show();
+    clearInterval(timer_id);
     game_is_on = false;
     $('#timer').html("<span class='lost'>no</span>");
 }
@@ -121,7 +134,7 @@ function switch_to_new_level() {
 function handle_choice(k) {
     if (game_is_on) {
         if (k == current_level.correct_answer) {
-            win();
+            pass_level();
         } else {
             lose();
         }
@@ -130,6 +143,11 @@ function handle_choice(k) {
 
 function visualize_timer() {
     $('#timer').text(timer);
+}
+
+function set_timer(n) {
+    timer = n;
+    visualize_timer();
 }
 
 function add_to_timer(n) {
@@ -148,7 +166,7 @@ function decrement_time() {
 }
 
 $(function() {
-    new_game();
+    start_new_game();
 
     $(document).on('click', '.choice', function() {
         handle_choice($(this).attr("data-number"));
@@ -159,11 +177,6 @@ $(function() {
     });
 
     $(document).on('click', '#try-again', function() {
-        new_game();
+        start_new_game();
     });
-
-    setInterval(function() {
-        // console.log(358);
-        decrement_time()
-    }, 1000);
 });
