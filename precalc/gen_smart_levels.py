@@ -38,7 +38,7 @@ def invdiff(a):
 
 
 FEATURES = ['m', 'mind', 'maxd', 'b', 't']
-SORT_FEATURES = ['n', 'm', 'mind', 'maxd', 'b', 't']
+SORT_FEATURES = ['n', 'm', 't', 'b', 'mind', 'maxd']
 FUNCTIONS = [average, average, invdiff, invdiff, invdiff, invdiff]
 
 

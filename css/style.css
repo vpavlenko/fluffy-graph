@@ -13,8 +13,8 @@ body div {
 }
 
 
-#counter {
-	position: absolute;
+#counter, #timer {
+	/*position: absolute;*/
 	font-family: Helvetica;
 	box-sizing: border-box;
 	width: 200px;
@@ -24,19 +24,13 @@ body div {
 	padding-top: 70px;
 }
 
-#timer {
+#hearts {
 	position: absolute;
-	font-family: Helvetica;
-	box-sizing: border-box;
-	width: 200px;
-	height: 200px;
-	right: 87px;
-	font-size: 60px;
-	padding-top: 70px;
+	color: red;
 }
 
-#hearts {
-	color: red;
+.first-row div {
+	display: inline-block;
 }
 
 .header #reference_graph {
@@ -62,16 +56,18 @@ body div {
 	}
 
 	#choices .choice:hover {
-		background-color: #D9EDF7;
+	    background: #fcf;
 	}
 
-.canvas {
-border-radius: 10px;
-box-shadow: inset 0 0 1px black;
+.canvas-parent {
+    border-radius: 10px;
+    box-shadow: inset 0 0 1px black;
+}
 
-/* hack for retina displays */
-width: 200px;
-height: 200px;
+.canvas {
+	/* hack for retina displays */
+	width: 200px;
+	height: 200px;
 }
 
 .lost {
@@ -86,9 +82,9 @@ height: 200px;
 	background-color: pink;
 }
 
-.game-over {
+.game-over, .win {
 	display: none;
-	opacity: 0.85;
+	opacity: 0.95;
 	background-color: lightblue;
 	position: absolute;
 	bottom: 0px;

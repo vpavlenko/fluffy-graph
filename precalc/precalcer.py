@@ -17,11 +17,11 @@ delta = 25;
 EPSILON = 1e-6;
 MIN_CROSS_PRODUCT = height * width / 50;
 SPRING_LAYOUT_ITERATIONS = 60
-MINIMAL_ANGLE_BETWEEN_EDGES = 10  # 10
+MINIMAL_ANGLE_BETWEEN_EDGES = 12  # 10
 MAX_GOOD_LAYOUTS_RETRY = 50  # 50
 SEED_FIND_DIFFERENT_ITERATIONS = 50
-MAX_DIFFERENT_LAYOUTS_RETRY = 200  # 200
-LAYOUT_CLASS_MIN_SIZE = 5  # 5
+MAX_DIFFERENT_LAYOUTS_RETRY = 500  # 200
+LAYOUT_CLASS_MIN_SIZE = 3  # 5
 
 
 def random_with_grid(limit, border, delta):
@@ -29,12 +29,12 @@ def random_with_grid(limit, border, delta):
     return random.randrange((limit - 2 * border) / delta) * delta + border;
 
 
-def generate_grid(num_vertices):
-    coords = [];
-    for i in range(num_vertices):
-        coords.append([random_with_grid(width, border, delta),
-                       random_with_grid(height, border, delta)]);
-    return coords;
+# def generate_grid(num_vertices):
+#     coords = [];
+#     for i in range(num_vertices):
+#         coords.append([random_with_grid(width, border, delta),
+#                        random_with_grid(height, border, delta)]);
+#     return coords;
 
 
 def geom_eq(a, b):
@@ -62,49 +62,49 @@ def vector(start, end):
     return [end[0] - start[0], end[1] - start[1]];
 
 
-def is_good_grid(graph, coords):
-    # 1. Check if there are two edges lie on the same line or nearly
+# def is_good_grid(graph, coords):
+#     # 1. Check if there are two edges lie on the same line or nearly
 
-    for i in range(len(graph['e'])):
-        for j in range(i + 1, len(graph['e'])):
-            u = edge_to_vector(graph['e'][i], coords);
-            v = edge_to_vector(graph['e'][j], coords);
-            if (geom_ge(MIN_CROSS_PRODUCT, abs(cross_product(u, v)))):
-                # print(abs(cross_product(u, v)), end='')
-                return False;
+#     for i in range(len(graph['e'])):
+#         for j in range(i + 1, len(graph['e'])):
+#             u = edge_to_vector(graph['e'][i], coords);
+#             v = edge_to_vector(graph['e'][j], coords);
+#             if (geom_ge(MIN_CROSS_PRODUCT, abs(cross_product(u, v)))):
+#                 # print(abs(cross_product(u, v)), end='')
+#                 return False;
 
-    # 2. Check if there is any vertex that lie on some edge
-    # Look, it also check if there are two vertices with the same coordinates
+#     # 2. Check if there is any vertex that lie on some edge
+#     # Look, it also check if there are two vertices with the same coordinates
 
-    for i in range(len(graph['e'])):
-        for j in range(graph['n']):
-            edge = graph['e'][i];
-            if (j == edge[0] or j == edge[1]):
-                continue
-            u = coords[edge[0]];
-            v = coords[edge[1]];
-            w = coords[j];
-            uv = vector(u, v);
-            uw = vector(u, w);
-            vw = vector(v, w);
-            vu = vector(v, u);
-            if ((geom_ge(MIN_CROSS_PRODUCT, cross_product(uw, uv)) and geom_ge(dot_product(uw, uv), 0)
-                    and geom_ge(dot_product(vw, vu), 0))):
-                # print(84, end='')
-                return False;
+#     for i in range(len(graph['e'])):
+#         for j in range(graph['n']):
+#             edge = graph['e'][i];
+#             if (j == edge[0] or j == edge[1]):
+#                 continue
+#             u = coords[edge[0]];
+#             v = coords[edge[1]];
+#             w = coords[j];
+#             uv = vector(u, v);
+#             uw = vector(u, w);
+#             vw = vector(v, w);
+#             vu = vector(v, u);
+#             if ((geom_ge(MIN_CROSS_PRODUCT, cross_product(uw, uv)) and geom_ge(dot_product(uw, uv), 0)
+#                     and geom_ge(dot_product(vw, vu), 0))):
+#                 # print(84, end='')
+#                 return False;
 
-    return True;
+#     return True;
 
 
-def draw_graph(graph):
-    while True:
-        coords = generate_grid(graph['n']);
-        if (is_good_grid(graph, coords)):
-            # print()
-            return coords
-        else:
-            pass
-            # print('.', end='')
+# def draw_graph(graph):
+#     while True:
+#         coords = generate_grid(graph['n']);
+#         if (is_good_grid(graph, coords)):
+#             # print()
+#             return coords
+#         else:
+#             pass
+#             # print('.', end='')
 
 
 def array_to_list(a):
@@ -166,10 +166,10 @@ def draw_graph_nx(g):
         pos = nx.spring_layout(g, scale=height - 2 * border, iterations=SPRING_LAYOUT_ITERATIONS)
         pos = [array_to_list(pos[i]) for i in range(len(g.nodes()))]
         if good_layout(g, pos):
-            print('Found GOOD angle')
+            print('G', end='')
             break
         else:
-            print('Found bad angle')
+            print('B', end='')
         if j > MAX_GOOD_LAYOUTS_RETRY:
             return None
     return pos
@@ -181,18 +181,19 @@ def not_enough_layouts(layouts):
     return not all(len(v) >= LAYOUT_CLASS_MIN_SIZE for v in layouts.values()) and (sum(lens) < MAX_DIFFERENT_LAYOUTS_RETRY)
 
 
-def flatten(a):
-    res = []
-    for i in a:
-        res.extend(i)
-    return res
+# def flatten(a):
+#     res = []
+#     for i in a:
+#         res.extend(i)
+#     return res
 
 
 def shrink_layouts(layouts):
+    new_layouts = {}
     for k in layouts:
-        layouts[k] = layouts[k][-LAYOUT_CLASS_MIN_SIZE:]
-    # return flatten(layouts.values())
-    return layouts
+        if len(layouts[k]) >= 2:
+            new_layouts[k] = layouts[k][-LAYOUT_CLASS_MIN_SIZE:]
+    return new_layouts
 
 
 def on_different_sides(e, f, pos):
@@ -215,7 +216,7 @@ def num_intersections(pos, g):
                 if on_different_sides(e, f, pos) and on_different_sides(f, e, pos):
                     res += 1
     res /= 2
-    print('num_intersections:', res)
+    # print('num_intersections:', res)
     return res
 
 

@@ -9,7 +9,16 @@
 <!-- For the heart icon -->
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
+<!-- VK Like button -->
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?113"></script>
+<script type="text/javascript">
+  VK.init({apiId: 4436705, onlyWidgets: true});
+</script>
+
 <body>
+    <!-- Fork me on GitHub button -->
+    <a href="https://github.com/vpavlenko/fluffy-graph"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
 	<div class="body-container">
         <div class="header">
             <div class="game-title">Fluffy graph</div>
@@ -17,15 +26,22 @@
         </div>
         <div class="game-container">
             <div class="game">
-                <div id="hearts"></div>
-        	    <div id="counter">0</div>
-        	    <div id="timer"></div>
-        	    <div id="reference_graph"></div>
+                <div class="first-row">
+            	    <div id="counter-parent">
+                        <div id="hearts"></div>
+                        <div id="counter">0</div>
+                    </div>
+                    <div id="reference_graph"></div>
+            	    <div id="timer"></div>
+                </div>
         	    <div id="choices"></div>
             </div>
             <div class="game-over">
-            Game over
-            <input type="button" id="try-again" value="Try again">
+                Game over
+                <input type="button" id="try-again" value="Try again">
+            </div>
+            <div class="win">
+                Congratulations! You've passed all the levels. Well done, Isomorphism Ninja!
             </div>
         </div>
         <div class="instructions">
@@ -38,10 +54,16 @@
             Created by <a href="https://github.com/vpavlenko">Vitaly Pavlenko</a> and <a href="https://github.com/EnrikoLabriko">Enriko Labriko</a>
             </div>
             <div class="share">
-                <div class="twitter">
+                <span class="twitter">
                     <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://gg.gg/fluffy" data-text="Check out Fluffy Graph, a game where you find different images of the same graph! #fluffy-graph" data-via="vitalypavlenko">Tweet</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                </div>
+                </span>
+                <span class="vk">
+                    <div id="vk_like"></div>
+                    <script type="text/javascript">
+                    VK.Widgets.Like("vk_like", {type: "mini", height: 18});
+                    </script>
+                </span>
             </div>
         </div>
     </div>

@@ -42,8 +42,8 @@ function start_timer() {
 function start_new_game() {
     $('.game-over').hide();
     game_is_on = true;
-    generate_new_level();
     correct_answers = 0;
+    generate_level();
     $("#counter").text(correct_answers);
     switch_to_new_level();
     start_timer();
@@ -51,7 +51,7 @@ function start_new_game() {
     visualize_hearts();
 }
 
-function pass_level() {
+function pass_level() {   
     var current_correct_answers = ++correct_answers;
     
     // Visualize green color around correct-answers counter
@@ -62,13 +62,18 @@ function pass_level() {
         }
     }, 300);
     
-    add_to_timer(3 + Math.round(correct_answers / ADD_SECOND_PER_LEVELS));
-    $("#counter").text(correct_answers);
-    switch_to_new_level();
+    if (correct_answers >= levels.length) {
+        win();
+    } else {
+        add_to_timer(3 + Math.round(correct_answers / ADD_SECOND_PER_LEVELS));
+        $("#counter").text(correct_answers);
+        generate_level();
+        switch_to_new_level();
+    }
 }
 
 function regenerate_level() {
-    generate_level(correct_answers);
+    generate_level();
     switch_to_new_level();
 }
 
@@ -92,14 +97,24 @@ function fail_level() {
     }
 }
 
-function lose() {
-    $('.game-over').show();
+function stop_the_game() {
     clearInterval(timer_id);
     game_is_on = false;
-    $('#timer').html("<span class='lost'>no</span>");
 }
 
-function generate_level(level) {
+function win() {
+    stop_the_game();
+    $('.win').show();
+}
+
+function lose() {
+    stop_the_game();
+    $('.game-over').show();
+    // $('#timer').html("<span class='lost'>no</span>");
+}
+
+function generate_level() {
+    var level = correct_answers;
     console.log('level: ' + level);
     var num_choices = (correct_answers >= 5) ? ((correct_answers >= 30) ? 4 : 3) : 2;
 
@@ -129,17 +144,9 @@ function generate_level(level) {
     };
 }
 
-function generate_new_level() {
-    var level = Math.min(correct_answers, levels.length - 1) + 1;
-    generate_level(level);
-}
-
 function switch_to_new_level() {
     current_level = new_level;
     draw_graphs(current_level.reference_graph, current_level.choices);
-    // dirty hack. otherwise it doesn't redraw
-    // setTimeout(generate_new_level, 5);
-    generate_new_level();
 }
 
 function handle_choice(k) {
