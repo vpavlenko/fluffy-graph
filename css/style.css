@@ -5,41 +5,60 @@ body div {
 .body-container {
 	margin-left: auto;
 	margin-right: auto;
-	/*border: 1px solid black;*/
 	text-align: center;
 	width: 950px;
 	position: relative;
-	/*opacity: 0;*/
 }
 
+.first-row {
+	
+}
 
-#counter, #timer {
-	/*position: absolute;*/
+.first-row > div {
+	display: inline-block;
 	font-family: Helvetica;
 	box-sizing: border-box;
 	width: 200px;
 	height: 200px;
-	left: 87px;
 	font-size: 60px;
-	padding-top: 70px;
 }
 
-#hearts {
+.first-row #counter-container {
 	position: absolute;
-	color: red;
+	left: 87px;
 }
 
-.first-row div {
-	display: inline-block;
-}
-
-.header #reference_graph {
-	/*text-align: center;*/
-}
-
-	#reference_graph .canvas {
-
+	#counter-container #hearts {
+		position: absolute;
+		left: 60px;
+		top: 20px;
+		color: red;
 	}
+
+	#counter-container #counter {
+		font-family: Helvetica;
+		box-sizing: border-box;
+		width: 200px;
+		height: 200px;
+		font-size: 60px;
+		padding-top: 60px;
+	}
+
+.first-row #reference_graph {
+
+}
+
+.first-row #timer {
+	position: absolute;
+	right: 87px;
+	padding-top: 60px;
+}
+
+
+
+
+
+
 
 #choices {
 	text-align: center;
@@ -92,4 +111,40 @@ body div {
 	left: 0px;
 	right: 0px;
 	z-index: 100;
+}
+
+.game-over .game-over-text {
+	font-family: 'Noto Sans', sans-serif;
+	font-size: 60px;
+	margin-bottom: 20px;
+	margin-top: 180px;
+}
+
+
+
+
+input#try-again {
+  position: relative;
+  display: inline-block;
+  font-family: 'Noto Sans', Arial, Helvetica, FreeSans, "Liberation Sans", "Nimbus Sans L", sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: rgb(245,245,245);
+  text-shadow: 0 -1px rgba(0,0,0,.1);
+  text-decoration: none;
+  user-select: none;
+  padding: .3em 1em;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  background: #0c9c0d linear-gradient(#82d18d, #0c9c0d);
+  box-shadow: inset #72de26 0 -1px 1px, inset 0 1px 1px #98ff98, #3caa3c 0 0 0 1px, rgba(0,0,0,.3) 0 2px 5px;
+}
+input#try-again:hover {
+  cursor: pointer;
+}
+input#try-again:active {
+  top: 1px;
+  color: #fff;
+  box-shadow: 0 -1px 3px rgba(0,0,0,.3), 0 1px 1px #fff, inset 0 1px 2px rgba(0,0,0,.8), inset 0 -1px 0 rgba(0,0,0,.05);
 }

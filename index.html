@@ -8,9 +8,10 @@
 
 <!-- For the heart icon -->
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
 
 <!-- VK Like button -->
-<script type="text/javascript" src="//vk.com/js/api/openapi.js?113"></script>
+<!-- <script type="text/javascript" src="//vk.com/js/api/openapi.js?113"></script> -->
 <script type="text/javascript">
   VK.init({apiId: 4436705, onlyWidgets: true});
 </script>
@@ -27,9 +28,9 @@
         <div class="game-container">
             <div class="game">
                 <div class="first-row">
-            	    <div id="counter-parent">
+            	    <div id="counter-container">
                         <div id="hearts"></div>
-                        <div id="counter">0</div>
+                        <div id="counter"></div>
                     </div>
                     <div id="reference_graph"></div>
             	    <div id="timer"></div>
@@ -37,7 +38,7 @@
         	    <div id="choices"></div>
             </div>
             <div class="game-over">
-                Game over
+                <div class="game-over-text">Game over</div>
                 <input type="button" id="try-again" value="Try again">
             </div>
             <div class="win">

@@ -1,7 +1,7 @@
 fluffy-graph
 ============
 
-Addictive NP-hard game where you find isomorphic graphs
+NP-hard game where you find isomorphic graphs
 
 
 Tools
