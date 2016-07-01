@@ -10,11 +10,10 @@
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
 
-<!-- VK Like button -->
-<!-- <script type="text/javascript" src="//vk.com/js/api/openapi.js?113"></script> -->
-<script type="text/javascript">
-  VK.init({apiId: 4436705, onlyWidgets: true});
-</script>
+<script src="/js/likely.js"></script>
+<link rel="stylesheet" href="/css/likely.css">
+
+<!-- Yandex.Metrika counter --> <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter38262060 = new Ya.Metrika({ id:38262060, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/38262060" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
 
 <body>
     <!-- Fork me on GitHub button -->
@@ -55,16 +54,12 @@
             Created by <a href="https://github.com/vpavlenko">Vitaly Pavlenko</a> and <a href="https://github.com/EnrikoLabriko">Enriko Labriko</a>
             </div>
             <div class="share">
-                <span class="twitter">
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://gg.gg/fluffy" data-text="Check out Fluffy Graph, a game where you find different images of the same graph! #fluffy-graph" data-via="vitalypavlenko">Tweet</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                </span>
-                <span class="vk">
-                    <div id="vk_like"></div>
-                    <script type="text/javascript">
-                    VK.Widgets.Like("vk_like", {type: "mini", height: 18});
-                    </script>
-                </span>
+                <div class="likely">
+                  <div class="twitter">Tweet</div>
+                  <div class="facebook">Share</div>
+                  <div class="vkontakte">Share</div>
+                  <div class="telegram">Send</div>
+                </div>
             </div>
         </div>
     </div>
