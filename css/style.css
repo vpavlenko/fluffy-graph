@@ -35,6 +35,13 @@ body div {
 		color: red;
 	}
 
+    #counter-container #freezes {
+        position: absolute;
+        left: 60px;
+        bottom: 20px;
+        color: blue;
+    }
+
 	#counter-container #counter {
 		font-family: Helvetica;
 		box-sizing: border-box;

@@ -8,6 +8,10 @@ var game_is_on = true;
 var timer = 0;
 
 var timer_id = -1;
+var is_time_freezed = true;
+
+var hearts = -1;
+var freezes = -1;
 
 var ADD_SECOND_PER_LEVELS = 10;
 
@@ -48,7 +52,10 @@ function start_new_game() {
     switch_to_new_level();
     start_timer();
     hearts = 3;
+    freezes = 3;
+    is_time_freezed = true;
     visualize_hearts();
+    visualize_freezes();
 }
 
 function pass_level() {
@@ -69,6 +76,7 @@ function pass_level() {
         $("#counter").text(correct_answers);
         generate_level();
         switch_to_new_level();
+        is_time_freezed = false;
     }
 }
 
@@ -180,7 +188,7 @@ function add_to_timer(n) {
 }
 
 function decrement_time() {
-    if (game_is_on) {
+    if (game_is_on && !is_time_freezed) {
         timer--;
         visualize_timer();
     };
@@ -200,6 +208,13 @@ function visualize_hearts() {
     }
 }
 
+function visualize_freezes() {
+    $('#freezes').html('');
+    for (var i = 0; i < freezes; ++i) {
+        $('#freezes').append($('<i class="fa fa-heart">'));
+    }
+}
+
 $(function() {
     start_new_game();
 
@@ -208,7 +223,16 @@ $(function() {
     });
 
     $(document).on('keypress', 'html', function(event) {
-        handle_choice(event.keyCode - 49);
+        if (event.keyCode == 32) {
+            // Space
+            if (freezes > 0) {
+                is_time_freezed = true;
+                freezes--;
+                visualize_freezes();
+            }
+        } else {
+            handle_choice(event.keyCode - 49);
+        }
     });
 
     $(document).on('click', '#try-again', function() {

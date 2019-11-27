@@ -25,6 +25,7 @@ var border = 30;
 var delta = 35;
 var EPSILON = 1e-6;
 var MIN_CROSS_PRODUCT = height * width / 10;
+const VERTEX_COLORS = ['blue', 'red', 'green', 'yellow', 'black', 'orange', 'pink'];
 
 
 function mul_vector_matrix(vector, matrix) {
@@ -106,7 +107,7 @@ function draw_graph_selected_coords(graph, div, coords) {
     for (var i in coords) {
         context.beginPath();
         context.arc(coords[i][0], coords[i][1], 9, 0, 2 * Math.PI, false);
-        context.fillStyle = 'blue';
+        context.fillStyle = VERTEX_COLORS[i];
         context.fill();
     }
 }
