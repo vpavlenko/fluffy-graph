@@ -29,7 +29,7 @@ var MIN_CROSS_PRODUCT = height * width / 10;
 
 function mul_vector_matrix(vector, matrix) {
     vector = [vector[0] - width / 2, vector[1] - height / 2];
-    vector = [vector[0] * matrix[0][0] + vector[1] * matrix[1][0], 
+    vector = [vector[0] * matrix[0][0] + vector[1] * matrix[1][0],
               vector[0] * matrix[0][1] + vector[1] * matrix[1][1]];
     vector = [vector[0] + width / 2, vector[1] + height / 2];
     return vector;
@@ -90,7 +90,7 @@ function draw_graph_selected_coords(graph, div, coords) {
     div.html(canvas);
 
     var context = canvas[0].getContext('2d');
-    
+
     coords = random_transform(coords)
 
     for (var i in graph.e) {

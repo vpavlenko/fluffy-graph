@@ -51,9 +51,9 @@ function start_new_game() {
     visualize_hearts();
 }
 
-function pass_level() {   
+function pass_level() {
     var current_correct_answers = ++correct_answers;
-    
+
     // Visualize green color around correct-answers counter
     $('#counter').addClass('counter-win');
     setTimeout(function() {
@@ -61,7 +61,7 @@ function pass_level() {
             $('#counter').removeClass('counter-win');
         }
     }, 300);
-    
+
     if (correct_answers >= levels.length) {
         win();
     } else {
@@ -142,6 +142,8 @@ function generate_level() {
         reference_graph: reference_graph,
         choices: choices
     };
+
+    console.log('New level:', new_level);
 }
 
 function switch_to_new_level() {
