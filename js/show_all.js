@@ -1,5 +1,5 @@
 $(function() {
-    for (var i = 50; i < 69; ++i) {
+    for (var i = 1; i < 5; ++i) {
         var level_div = $('<div>').text("Level #" + i);
         var level = levels[i]
         for (var j in level) {
