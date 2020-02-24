@@ -155,3 +155,20 @@ input#try-again:active {
   color: #fff;
   box-shadow: 0 -1px 3px rgba(0,0,0,.3), 0 1px 1px #fff, inset 0 1px 2px rgba(0,0,0,.8), inset 0 -1px 0 rgba(0,0,0,.05);
 }
+
+.instructions {
+	margin-top: 1em;
+	text-align: left;
+}
+
+.choice:nth-child(1)::after {
+	content: "1️⃣";
+}
+
+.choice:nth-child(2)::after {
+	content: "2️⃣";
+}
+
+.choice:nth-child(3)::after {
+	content: "3️⃣";
+}
